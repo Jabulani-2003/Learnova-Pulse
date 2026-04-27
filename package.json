@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "classpulse",
   "version": "0.1.0",
   "private": true,
@@ -40,5 +41,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+=======
+  "dependencies": {
+    "firebase": "^12.12.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "react-icons": "^5.6.0",
+    "react-router-dom": "^7.14.2",
+    "recharts": "^3.8.1",
+    "xlsx": "^0.18.5"
+>>>>>>> 99c3d5b (Test deploy)
   }
 }
