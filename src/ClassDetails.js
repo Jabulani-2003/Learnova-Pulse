@@ -3,10 +3,19 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useParams } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
-  PieChart, Pie, Cell,
-  LineChart, Line
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line
 } from "recharts";
 function ClassDetails() {
   const { id } = useParams(); // ✅ get class id
@@ -372,49 +381,7 @@ const getTeacherComment = () => {
   return "Performance is below expectations. Intervention is required.";
 };
 // ================= CHART DATA =================
-const getBarChartData = () => {
-  const currentTest = tests.find(t => t.name === selectedTest);
-  const total = currentTest?.total || 0;
 
-  return learners.map(l => {
-    const mark = marksData[selectedTest]?.[l] || 0;
-    const percent = total ? Math.round((mark / total) * 100) : 0;
-
-    return {
-      name: l,
-      marks: percent
-    };
-  });
-};
-
-const getPieChartData = () => {
-  const pass = getPassRate();
-  const fail = getFailRate();
-
-  return [
-    { name: "Pass", value: pass },
-    { name: "Fail", value: fail }
-  ];
-};
-
-const getLineChartData = () => {
-  return tests.map(test => {
-    const total = test.total;
-
-    const values = Object.values(marksData[test.name] || {})
-      .map(Number)
-      .filter(v => !isNaN(v));
-
-    const avg = values.length
-      ? values.reduce((a, b) => a + b, 0) / values.length
-      : 0;
-
-    return {
-      test: test.name,
-      average: total ? Math.round((avg / total) * 100) : 0
-    };
-  });
-};
 const getClassAverage = () => {
   const currentTest = tests.find(t => t.name === selectedTest);
   const testTotal = currentTest?.total || 0;
@@ -731,29 +698,7 @@ const getDistinctions = () => {
 const getDistinctionCount = () => {
   return getDistinctions().length;
 };
-const backupData = () => {
-  const data = {
-    learners,
-    history,
-    marksData,
-    schedule,
-    tests,
-    teacherName,
-    schoolName,
-    theme
-  };
 
-  const blob = new Blob([JSON.stringify(data)], {
-    type: "application/json"
-  });
-
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `class-${id}-full-backup.json`;
-  a.click();
-};
 const handleFileUpload = (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -785,31 +730,7 @@ const deleteFile = (index) => {
 /* =========================
    RESTORE DATA
 ========================= */
-const restoreData = (file) => {
-  if (!window.confirm("Restore will overwrite current data. Continue?")) return;
-  const reader = new FileReader();
 
-  reader.onload = (e) => {
-    const data = JSON.parse(e.target.result);
-
-    setLearners(data.learners || []);
-    setHistory(data.history || []);
-    setMarksData(data.marksData || {});
-    setSchedule(data.schedule || []);
-    setTests(data.tests || []);
-    setTeacherName(data.teacherName || "");
-    setSchoolName(data.schoolName || "");
-    setTheme(data.theme || "light");
-
-    localStorage.setItem(`learners-${id}`, JSON.stringify(data.learners || []));
-    localStorage.setItem(`attendanceHistory-${id}`, JSON.stringify(data.history || []));
-    localStorage.setItem(`marks-${id}`, JSON.stringify(data.marksData || {}));
-    localStorage.setItem(`schedule-${id}`, JSON.stringify(data.schedule || []));
-    localStorage.setItem(`tests-${id}`, JSON.stringify(data.tests || []));
-  };
-
-  reader.readAsText(file);
-};
   /* =========================
      EXPORT CSV
   ========================= */

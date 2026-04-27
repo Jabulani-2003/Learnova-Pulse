@@ -68,6 +68,7 @@ useEffect(() => {
   if (user) {
     fetchClasses();
   }
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }, [user]);
   // ➕ Add class
   const addClass = async () => {
